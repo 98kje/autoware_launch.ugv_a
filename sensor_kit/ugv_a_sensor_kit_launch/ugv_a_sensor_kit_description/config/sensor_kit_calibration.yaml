@@ -7,9 +7,9 @@ sensor_kit_base_link:
     pitch: 0.000000
     yaw: 0.000000
   d435i/camera_link:
-    x: 0.000000
+    x: 0.340
     y: 0.000000
-    z: 0.000000
+    z: 0.0125
     roll: 0.000000
     pitch: 0.000000
     yaw: 0.000000

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:macro name="sensor_kit_macro" params="parent x y z roll pitch yaw">
-    <xacro:include filename="$(find ugv_a_sensor_kit_description)/sensor/vls/urdf/VLS-128.urdf.xacro"/>
-    <xacro:include filename="$(find ugv_a_sensor_kit_description)/sensor/camera/urdf/monocular_camera.xacro"/>
+    <xacro:include filename="$(find ugv_a_sensor_kit_description)/sensor/airy/urdf/airy.urdf.xacro"/>
+    <xacro:include filename="$(find ugv_a_sensor_kit_description)/sensor/camera/urdf/d435i_camera.xacro"/>
     <xacro:include filename="$(find ugv_a_sensor_kit_description)/sensor/imu/urdf/imu.xacro"/>
 
     <xacro:arg name="gpu" default="false"/>
@@ -23,7 +23,7 @@
     <xacro:property name="calibration" value="${xacro.load_yaml('$(arg config_dir)/sensor_kit_calibration.yaml')}"/>
 
     <!-- lidar -->
-    <xacro:VLS-128 parent="sensor_kit_base_link" name="rs_airy_top" topic="/points_raw" hz="10" samples="220" gpu="$(arg gpu)">
+    <xacro:Airy parent="sensor_kit_base_link" name="rs_airy_top" topic="/points_raw" hz="10" gpu="$(arg gpu)">
       <origin
         xyz="${calibration['sensor_kit_base_link']['rs_airy_top_base_link']['x']}
              ${calibration['sensor_kit_base_link']['rs_airy_top_base_link']['y']}
@@ -32,10 +32,10 @@
              ${calibration['sensor_kit_base_link']['rs_airy_top_base_link']['pitch']}
              ${calibration['sensor_kit_base_link']['rs_airy_top_base_link']['yaw']}"
       />
-    </xacro:VLS-128>
+    </xacro:Airy>
 
     <!-- camera -->
-    <xacro:monocular_camera_macro
+    <xacro:d435i_camera_macro
       name="d435i/camera"
       parent="sensor_kit_base_link"
       namespace=""

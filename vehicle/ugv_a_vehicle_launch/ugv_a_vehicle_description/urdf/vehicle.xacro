@@ -5,10 +5,39 @@
 
   <!-- vehicle body -->
   <link name="base_link">
+    <!-- body: mesh origin is the top surface, deck height 0.345 -->
     <visual>
-      <origin xyz="${vehicle_info['/**']['ros__parameters']['wheel_base']/2.0} 0 0" rpy="${pi/2.0} 0 ${pi}"/>
+      <origin xyz="0 0 0.345" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://ugv_a_vehicle_description/mesh/lexus.dae" scale="1 1 1"/>
+        <mesh filename="package://ugv_a_vehicle_description/mesh/ranger_base.dae" scale="1 1 1"/>
+      </geometry>
+    </visual>
+    <!-- front left wheel -->
+    <visual>
+      <origin xyz="${vehicle_info['/**']['ros__parameters']['wheel_base']} ${vehicle_info['/**']['ros__parameters']['wheel_tread']/2.0} ${vehicle_info['/**']['ros__parameters']['wheel_radius']}" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ugv_a_vehicle_description/mesh/wheel_v3.dae" scale="14.1 10.6 14.1"/>
+      </geometry>
+    </visual>
+    <!-- front right wheel -->
+    <visual>
+      <origin xyz="${vehicle_info['/**']['ros__parameters']['wheel_base']} ${-vehicle_info['/**']['ros__parameters']['wheel_tread']/2.0} ${vehicle_info['/**']['ros__parameters']['wheel_radius']}" rpy="0 0 ${pi}"/>
+      <geometry>
+        <mesh filename="package://ugv_a_vehicle_description/mesh/wheel_v3.dae" scale="14.1 10.6 14.1"/>
+      </geometry>
+    </visual>
+    <!-- rear left wheel -->
+    <visual>
+      <origin xyz="${-vehicle_info['/**']['ros__parameters']['wheel_base']} ${vehicle_info['/**']['ros__parameters']['wheel_tread']/2.0} ${vehicle_info['/**']['ros__parameters']['wheel_radius']}" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ugv_a_vehicle_description/mesh/wheel_v3.dae" scale="14.1 10.6 14.1"/>
+      </geometry>
+    </visual>
+    <!-- rear right wheel -->
+    <visual>
+      <origin xyz="${-vehicle_info['/**']['ros__parameters']['wheel_base']} ${-vehicle_info['/**']['ros__parameters']['wheel_tread']/2.0} ${vehicle_info['/**']['ros__parameters']['wheel_radius']}" rpy="0 0 ${pi}"/>
+      <geometry>
+        <mesh filename="package://ugv_a_vehicle_description/mesh/wheel_v3.dae" scale="14.1 10.6 14.1"/>
       </geometry>
     </visual>
   </link>

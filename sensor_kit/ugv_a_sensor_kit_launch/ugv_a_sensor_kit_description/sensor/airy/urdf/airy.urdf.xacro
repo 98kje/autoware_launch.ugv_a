@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<!-- RoboSense Airy (phi60 x H63 mm, 96 lasers, 360 x 90 deg FOV). Structure follows VLS-128.urdf.xacro. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Airy">
+  <xacro:property name="M_PI" value="3.1415926535897931"/>
+  <xacro:macro
+    name="Airy"
+    params="*origin parent:=base_link name:=rs_airy topic:=/rslidar_points hz:=10 lasers:=96 samples:=1800 collision_range:=0.1 min_range:=0.1 max_range:=60.0 noise:=0.008 min_angle:=-${M_PI} max_angle:=${M_PI} min_vertical_angle:=0.0 max_vertical_angle:=${90.0*M_PI/180.0} gpu:=false"
+  >
+    <joint name="${name}_base_mount_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${name}_base_link"/>
+    </joint>
+
+    <link name="${name}_base_link">
+      <inertial>
+        <mass value="0.24"/>
+        <origin xyz="0 0 0.0315"/>
+        <inertia
+          ixx="${(0.24 * (3.0*0.03*0.03 + 0.063*0.063)) / 12.0}"
+          ixy="0"
+          ixz="0"
+          iyy="${(0.24 * (3.0*0.03*0.03 + 0.063*0.063)) / 12.0}"
+          iyz="0"
+          izz="${0.5 * 0.24 * (0.03*0.03)}"
+        />
+      </inertial>
+      <visual>
+        <!-- airy.dae: values in mm with Y-up, origin at bottom center; connector (-Z in mesh) faces -X -->
+        <origin xyz="0 0 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
+        <geometry>
+          <mesh filename="package://ugv_a_sensor_kit_description/sensor/airy/meshes/airy.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0.0315"/>
+        <geometry>
+          <cylinder radius="0.03" length="0.063"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- TODO: set to the point cloud origin height from the Airy User Guide (placeholder: half height) -->
+    <joint name="${name}_base_scan_joint" type="fixed">
+      <origin xyz="0 0 0.0315" rpy="0 0 0"/>
+      <parent link="${name}_base_link"/>
+      <child link="${name}"/>
+    </joint>
+
+    <link name="${name}">
+      <inertial>
+        <mass value="0.01"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1e-7" ixy="0" ixz="0" iyy="1e-7" iyz="0" izz="1e-7"/>
+      </inertial>
+    </link>
+
+    <!-- Gazebo requires the velodyne_gazebo_plugins package -->
+    <gazebo reference="${name}">
+      <xacro:if value="${gpu}">
+        <sensor type="gpu_ray" name="${name}-Airy">
+          <pose>0 0 0 0 0 0</pose>
+          <visualize>false</visualize>
+          <update_rate>${hz}</update_rate>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>${samples}</samples>
+                <resolution>1</resolution>
+                <min_angle>${min_angle}</min_angle>
+                <max_angle>${max_angle}</max_angle>
+              </horizontal>
+              <vertical>
+                <samples>${lasers}</samples>
+                <resolution>1</resolution>
+                <min_angle>${min_vertical_angle}</min_angle>
+                <max_angle>${max_vertical_angle}</max_angle>
+              </vertical>
+            </scan>
+            <range>
+              <min>${collision_range}</min>
+              <max>${max_range+1}</max>
+              <resolution>0.001</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.0</stddev>
+            </noise>
+          </ray>
+          <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_velodyne_laser.so">
+            <topicName>${topic}</topicName>
+            <frameName>${name}</frameName>
+            <min_range>${min_range}</min_range>
+            <max_range>${max_range}</max_range>
+            <gaussianNoise>${noise}</gaussianNoise>
+          </plugin>
+        </sensor>
+      </xacro:if>
+      <xacro:unless value="${gpu}">
+        <sensor type="ray" name="${name}-Airy">
+          <pose>0 0 0 0 0 0</pose>
+          <visualize>false</visualize>
+          <update_rate>${hz}</update_rate>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>${samples}</samples>
+                <resolution>1</resolution>
+                <min_angle>${min_angle}</min_angle>
+                <max_angle>${max_angle}</max_angle>
+              </horizontal>
+              <vertical>
+                <samples>${lasers}</samples>
+                <resolution>1</resolution>
+                <min_angle>${min_vertical_angle}</min_angle>
+                <max_angle>${max_vertical_angle}</max_angle>
+              </vertical>
+            </scan>
+            <range>
+              <min>${collision_range}</min>
+              <max>${max_range+1}</max>
+              <resolution>0.001</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.0</stddev>
+            </noise>
+          </ray>
+          <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_velodyne_laser.so">
+            <topicName>${topic}</topicName>
+            <frameName>${name}</frameName>
+            <min_range>${min_range}</min_range>
+            <max_range>${max_range}</max_range>
+            <gaussianNoise>${noise}</gaussianNoise>
+          </plugin>
+        </sensor>
+      </xacro:unless>
+    </gazebo>
+  </xacro:macro>
+</robot>
