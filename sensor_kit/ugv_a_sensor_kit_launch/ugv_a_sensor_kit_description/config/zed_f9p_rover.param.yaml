@@ -1,0 +1,27 @@
+# u-blox ZED-F9P (CUAV C-RTK 9P, HPG 1.13) rover, USB connection.
+# ublox_gps/config/zed_f9p.yaml is a base station config (tmode3 survey-in), do not use it on the vehicle.
+/**:
+  ros__parameters:
+    device: /dev/gnss           # udev symlink, see /etc/udev/rules.d/99-ublox-gnss.rules
+    frame_id: gnss_link
+    tmode3: 0                   # rover, time mode disabled
+    rate: 4.0                   # measurement rate [Hz]
+    nav_rate: 1
+    dynamic_model: portable
+
+    # match the F9P factory constellation set so the driver does not cold reset the receiver on every start
+    gnss:
+      gps: true
+      glonass: true
+      galileo: true
+      beidou: true
+      qzss: true
+      sbas: true
+
+    inf:
+      all: true
+
+    publish:
+      all: false
+      nav:
+        pvt: true               # NavSatFix on fix, TwistWithCovarianceStamped on fix_velocity

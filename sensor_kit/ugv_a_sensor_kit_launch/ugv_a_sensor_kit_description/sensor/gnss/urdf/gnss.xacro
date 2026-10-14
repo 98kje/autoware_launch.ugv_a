@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="gnss_macro" params="name parent x y z roll pitch yaw">
+    <xacro:property name="antenna_radius" value="0.04"/>
+    <xacro:property name="antenna_height" value="0.02"/>
+    <xacro:property name="mass" value="0.1"/>
+
+    <joint name="${name}_joint" type="fixed">
+      <origin rpy="${roll} ${pitch} ${yaw}" xyz="${x} ${y} ${z}"/>
+      <parent link="${parent}"/>
+      <child link="${name}_link"/>
+    </joint>
+
+    <!-- link origin is the antenna phase center, the body hangs below it -->
+    <link name="${name}_link">
+      <visual>
+        <geometry>
+          <cylinder radius="${antenna_radius}" length="${antenna_height}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 ${-antenna_height/2.0}"/>
+        <material name="white">
+          <color rgba="1.0 1.0 1.0 1.0"/>
+        </material>
+      </visual>
+      <inertial>
+        <origin rpy="0 0 0" xyz="0 0 ${-antenna_height/2.0}"/>
+        <mass value="${mass}"/>
+        <inertia
+          ixx="${mass*(3*antenna_radius*antenna_radius+antenna_height*antenna_height)/12.0}"
+          ixy="0.0"
+          ixz="0.0"
+          iyy="${mass*(3*antenna_radius*antenna_radius+antenna_height*antenna_height)/12.0}"
+          iyz="0.0"
+          izz="${mass*antenna_radius*antenna_radius/2.0}"
+        />
+      </inertial>
+    </link>
+  </xacro:macro>
+</robot>
