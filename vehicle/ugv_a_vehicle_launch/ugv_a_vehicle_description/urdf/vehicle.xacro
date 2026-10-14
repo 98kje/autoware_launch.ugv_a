@@ -5,7 +5,7 @@
 
   <!-- vehicle body -->
   <link name="base_link">
-    <!-- body: mesh origin is the top surface, deck height 0.345 -->
+    <!-- body - mesh origin is the top surface, deck height 0.345 -->
     <visual>
       <origin xyz="0 0 0.345" rpy="0 0 0"/>
       <geometry>

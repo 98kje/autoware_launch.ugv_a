@@ -26,7 +26,7 @@
         />
       </inertial>
       <visual>
-        <!-- airy.dae: values in mm with Y-up, origin at bottom center; connector (-Z in mesh) faces -X -->
+        <!-- airy.dae - values in mm with Y-up, origin at bottom center; connector (-Z in mesh) faces -X -->
         <origin xyz="0 0 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
         <geometry>
           <mesh filename="package://ugv_a_sensor_kit_description/sensor/airy/meshes/airy.dae" scale="0.001 0.001 0.001"/>
@@ -40,7 +40,7 @@
       </collision>
     </link>
 
-    <!-- TODO: set to the point cloud origin height from the Airy User Guide (placeholder: half height) -->
+    <!-- TODO - set to the point cloud origin height from the Airy User Guide (placeholder = half height) -->
     <joint name="${name}_base_scan_joint" type="fixed">
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <parent link="${name}_base_link"/>
