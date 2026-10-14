@@ -13,7 +13,7 @@
 
 /**:
   ros__parameters:
-    max_vel: 4.17           # max velocity limit [m/s]
+    max_vel: 1.5            # max velocity limit [m/s] # {OVERRIDE: Ranger Mini 3.0 max 1.5 m/s}
 
     # constraints param for normal driving
     normal:
