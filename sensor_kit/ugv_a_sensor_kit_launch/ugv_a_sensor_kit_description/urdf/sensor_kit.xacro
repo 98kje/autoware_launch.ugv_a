@@ -4,6 +4,7 @@
     <xacro:include filename="$(find ugv_a_sensor_kit_description)/sensor/airy/urdf/airy.urdf.xacro"/>
     <xacro:include filename="$(find ugv_a_sensor_kit_description)/sensor/camera/urdf/d435i_camera.xacro"/>
     <xacro:include filename="$(find ugv_a_sensor_kit_description)/sensor/imu/urdf/imu.xacro"/>
+    <xacro:include filename="$(find ugv_a_sensor_kit_description)/sensor/gnss/urdf/gnss.xacro"/>
 
     <xacro:arg name="gpu" default="false"/>
     <xacro:arg name="config_dir" default="$(find ugv_a_sensor_kit_description)/config"/>
@@ -63,6 +64,18 @@
       pitch="${calibration['sensor_kit_base_link']['rs_airy/imu_link']['pitch']}"
       yaw="${calibration['sensor_kit_base_link']['rs_airy/imu_link']['yaw']}"
       fps="100"
+    />
+
+    <!-- gnss -->
+    <xacro:gnss_macro
+      name="gnss"
+      parent="sensor_kit_base_link"
+      x="${calibration['sensor_kit_base_link']['gnss_link']['x']}"
+      y="${calibration['sensor_kit_base_link']['gnss_link']['y']}"
+      z="${calibration['sensor_kit_base_link']['gnss_link']['z']}"
+      roll="${calibration['sensor_kit_base_link']['gnss_link']['roll']}"
+      pitch="${calibration['sensor_kit_base_link']['gnss_link']['pitch']}"
+      yaw="${calibration['sensor_kit_base_link']['gnss_link']['yaw']}"
     />
   </xacro:macro>
 </robot>

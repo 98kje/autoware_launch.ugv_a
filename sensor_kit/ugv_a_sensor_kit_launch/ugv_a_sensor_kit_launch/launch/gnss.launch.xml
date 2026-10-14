@@ -1,27 +1,20 @@
 <launch>
   <arg name="launch_driver" default="true"/>
-  <arg name="gnss_receiver" default="ublox" description="ublox(default) or septentrio"/>
 
   <group>
     <push-ros-namespace namespace="gnss"/>
 
-    <!-- Switch topic name -->
-    <let name="navsatfix_topic_name" value="ublox/nav_sat_fix" if="$(eval &quot;'$(var gnss_receiver)'=='ublox'&quot;)"/>
-    <let name="navsatfix_topic_name" value="septentrio/nav_sat_fix" if="$(eval &quot;'$(var gnss_receiver)'=='septentrio'&quot;)"/>
-    <let name="orientation_topic_name" value="/autoware_orientation"/>
+    <arg name="ublox_param_file" default="$(find-pkg-share ugv_a_sensor_kit_description)/config/zed_f9p_rover.param.yaml"/>
+    <arg name="navsatfix_topic_name" default="ublox/nav_sat_fix"/>
+    <arg name="orientation_topic_name" default="/autoware_orientation"/>
 
-    <!-- Ublox Driver -->
-    <group if="$(eval &quot;'$(var gnss_receiver)'=='ublox'&quot;)">
-      <node pkg="ublox_gps" name="ublox" exec="ublox_gps_node" if="$(var launch_driver)" respawn="true" respawn_delay="1.0">
-        <remap from="~/fix" to="~/nav_sat_fix"/>
-        <param from="$(find-pkg-share ublox_gps)/config/zed_f9p.yaml"/>
-      </node>
-    </group>
-
-    <!-- Septentrio GNSS Driver -->
-    <group if="$(eval &quot;'$(var launch_driver)' and '$(var gnss_receiver)'=='septentrio'&quot;)">
-      <include file="$(find-pkg-share septentrio_gnss_driver)/launch/mosaic_x5_rover.launch.xml"/>
-    </group>
+    <!-- C-RTK 9P (u-blox ZED-F9P) driver -->
+    <node pkg="ublox_gps" exec="ublox_gps_node" name="ublox" if="$(var launch_driver)" respawn="true" respawn_delay="1.0">
+      <!-- the released ublox_gps publishes relative "fix", not "~/fix" -->
+      <remap from="fix" to="~/nav_sat_fix"/>
+      <remap from="fix_velocity" to="~/fix_velocity"/>
+      <param from="$(var ublox_param_file)"/>
+    </node>
 
     <!-- NavSatFix to MGRS Pose -->
     <include file="$(find-pkg-share autoware_gnss_poser)/launch/gnss_poser.launch.xml">
@@ -32,7 +25,8 @@
       <arg name="output_topic_gnss_pose_cov" value="pose_with_covariance"/>
       <arg name="output_topic_gnss_fixed" value="fixed"/>
 
-      <arg name="use_gnss_ins_orientation" value="true"/>
+      <!-- single antenna, no heading from GNSS -->
+      <arg name="use_gnss_ins_orientation" value="false"/>
     </include>
   </group>
 </launch>
