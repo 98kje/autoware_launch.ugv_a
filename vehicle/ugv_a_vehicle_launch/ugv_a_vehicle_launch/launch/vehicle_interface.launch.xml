@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
   <arg name="vehicle_id" default="$(env VEHICLE_ID default)"/>
+  <!-- passed by tier4_vehicle_launch, not used by the Ranger interface -->
+  <arg name="raw_vehicle_cmd_converter_param_path" default=""/>
+  <arg name="initial_engage_state" default="false"/>
+
+  <!-- Ranger Mini 3.0 CAN interface from the local workspace ~/kje_interface_ws (source its local_setup.bash after Autoware) -->
+  <include file="$(find-pkg-share kje_ranger_interface)/launch/ranger_interface.launch.xml"/>
 </launch>
