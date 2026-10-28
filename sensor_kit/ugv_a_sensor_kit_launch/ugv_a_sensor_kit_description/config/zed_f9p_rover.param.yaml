@@ -25,3 +25,5 @@
       all: false
       nav:
         pvt: true               # NavSatFix on fix, TwistWithCovarianceStamped on fix_velocity
+      rxm:
+        rtcm: true              # RxmRTCM on rxmrtcm: per-message crc/used flag, shows NTRIP corrections reach the F9P
