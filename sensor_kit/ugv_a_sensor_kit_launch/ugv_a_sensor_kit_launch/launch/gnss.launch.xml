@@ -7,13 +7,30 @@
     <arg name="ublox_param_file" default="$(find-pkg-share ugv_a_sensor_kit_description)/config/zed_f9p_rover.param.yaml"/>
     <arg name="navsatfix_topic_name" default="ublox/nav_sat_fix"/>
     <arg name="orientation_topic_name" default="/autoware_orientation"/>
+    <arg name="launch_ntrip" default="true"/>
+    <arg name="ntrip_param_file" default="$(find-pkg-share ugv_a_sensor_kit_description)/config/ntrip.param.yaml"/>
+    <arg name="ntrip_credentials_file" default="$(env HOME)/autoware_data/ntrip/ntrip_credentials.param.yaml"/>
 
-    <!-- C-RTK 9P (u-blox ZED-F9P) driver -->
+    <!-- C-RTK 9P (u-blox ZED-F9P) driver, ublox_gps 3.0.0 from source (~/autoware_ws, gnss_deps.repos) -->
     <node pkg="ublox_gps" exec="ublox_gps_node" name="ublox" if="$(var launch_driver)" respawn="true" respawn_delay="1.0">
-      <!-- the released ublox_gps publishes relative "fix", not "~/fix" -->
+      <!-- 3.0.0 publishes "~/fix"; the 2.3.0 binary published relative "fix" -->
+      <remap from="~/fix" to="~/nav_sat_fix"/>
       <remap from="fix" to="~/nav_sat_fix"/>
       <remap from="fix_velocity" to="~/fix_velocity"/>
+      <!-- the driver subscribes absolute /rtcm, keep the corrections in the gnss namespace -->
+      <remap from="/rtcm" to="rtcm"/>
       <param from="$(var ublox_param_file)"/>
+    </node>
+
+    <!-- NTRIP client: RTCM corrections -> rtcm, GGA from the fix back to the VRS caster -->
+    <!-- respawn: the node exits after reconnect_attempt_max (10 x 5 s); a phone hotspot can drop for longer -->
+    <node pkg="ntrip_client" exec="ntrip_ros.py" name="ntrip_client" if="$(var launch_ntrip)" output="screen" respawn="true" respawn_delay="10.0">
+      <remap from="fix" to="$(var navsatfix_topic_name)"/>
+      <!-- ublox_gps publishes raw receiver NMEA on gnss/nmea with UBX fragments mixed in;
+           a broken sentence crashes ntrip_client (checksum ValueError), so GGA comes from fix only -->
+      <remap from="nmea" to="~/nmea_unused"/>
+      <param from="$(var ntrip_param_file)"/>
+      <param from="$(var ntrip_credentials_file)"/>
     </node>
 
     <!-- NavSatFix to MGRS Pose -->
