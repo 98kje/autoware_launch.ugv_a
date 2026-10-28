@@ -1,0 +1,22 @@
+# NTRIP client for the NGII network RTK (VRS), corrections go to the ZED-F9P through ublox_gps /rtcm.
+# Credentials are not stored here: they are loaded from ntrip_credentials_file (gnss.launch.xml),
+# a host file outside git (~/autoware_data/ntrip/ntrip_credentials.param.yaml).
+# Casters (same NGII account, checked 2026-10-28):
+#   rts2.ngii.go.kr VRS-RTCM32 : works on office Wi-Fi and on LTE (phone hotspot), RTK FIX 4 s after first RTCM
+#   rts1.ngii.go.kr VRS-RTCM34 : works on office Wi-Fi, but 401 Unauthorized on LTE (phone hotspot)
+#   www.gnssdata.or.kr SUWN-RTCM31 etc. : single station, different account (login e-mail / gnss), no GGA needed
+/**:
+  ros__parameters:
+    host: rts2.ngii.go.kr
+    port: 2101
+    mountpoint: VRS-RTCM32
+    ntrip_version: "None"
+    authenticate: true
+    ssl: false
+    rtcm_message_package: rtcm_msgs
+    rtcm_frame_id: gnss_link
+    rtcm_timeout_seconds: 4
+    reconnect_attempt_max: 10
+    reconnect_attempt_wait_seconds: 5
+    nmea_max_length: 128
+    nmea_min_length: 3
