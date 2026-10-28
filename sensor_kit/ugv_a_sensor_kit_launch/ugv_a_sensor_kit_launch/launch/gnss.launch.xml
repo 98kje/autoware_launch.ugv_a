@@ -23,7 +23,8 @@
     </node>
 
     <!-- NTRIP client: RTCM corrections -> rtcm, GGA from the fix back to the VRS caster -->
-    <node pkg="ntrip_client" exec="ntrip_ros.py" name="ntrip_client" if="$(var launch_ntrip)" output="screen">
+    <!-- respawn: the node exits after reconnect_attempt_max (10 x 5 s); a phone hotspot can drop for longer -->
+    <node pkg="ntrip_client" exec="ntrip_ros.py" name="ntrip_client" if="$(var launch_ntrip)" output="screen" respawn="true" respawn_delay="10.0">
       <remap from="fix" to="$(var navsatfix_topic_name)"/>
       <!-- ublox_gps publishes raw receiver NMEA on gnss/nmea with UBX fragments mixed in;
            a broken sentence crashes ntrip_client (checksum ValueError), so GGA comes from fix only -->
