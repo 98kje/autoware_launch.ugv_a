@@ -40,7 +40,9 @@
       </collision>
     </link>
 
-    <!-- TODO - set to the point cloud origin height from the Airy User Guide (placeholder = half height) -->
+    <!-- RoboSense guide, 4.1 Product Coordinate System - the point cloud origin is the center of the lidar base,
+         +X points away from the connector, +Z up -> no offset from the base link -->
+
     <joint name="${name}_base_scan_joint" type="fixed">
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <parent link="${name}_base_link"/>
