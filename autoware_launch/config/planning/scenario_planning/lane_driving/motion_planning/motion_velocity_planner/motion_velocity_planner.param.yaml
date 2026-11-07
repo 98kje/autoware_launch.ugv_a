@@ -3,7 +3,7 @@
     smooth_velocity_before_planning: true  # [-] if true, smooth the velocity profile of the input trajectory before planning
 
     trajectory_polygon_collision_check: # used by obstacle_*_modules
-      decimate_trajectory_step_length : 2.0 # longitudinal step length to calculate trajectory polygon for collision checking
+      decimate_trajectory_step_length : 0.5 # longitudinal step length to calculate trajectory polygon for collision checking (ugv_a: 2.0 -> 0.5, R~2.3 m corners)
       goal_extended_trajectory_length: 6.0
 
       # consider the current ego pose (it is not the nearest pose on the reference trajectory)

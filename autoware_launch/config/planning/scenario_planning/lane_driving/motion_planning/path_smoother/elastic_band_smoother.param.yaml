@@ -12,14 +12,14 @@
 
       common:
         num_points: 100        # number of points for optimization [-]
-        delta_arc_length: 1.0  # delta arc length for optimization [m]
+        delta_arc_length: 0.5  # delta arc length for optimization [m] (ugv_a: 1.0 -> 0.5)
 
       clearance:
         num_joint_points: 3  # number of joint points (joint means connecting fixing and smoothing)
 
         clearance_for_fix: 0.0     # maximum optimizing range when applying fixing
-        clearance_for_joint: 0.1   # maximum optimizing range when applying jointing
-        clearance_for_smooth: 0.1  # maximum optimizing range when applying smoothing
+        clearance_for_joint: 0.02  # maximum optimizing range when applying jointing (ugv_a: 0.1 -> 0.02, follow designed centerline)
+        clearance_for_smooth: 0.02 # maximum optimizing range when applying smoothing (ugv_a: 0.1 -> 0.02)
 
       weight:
         smooth_weight: 1.0

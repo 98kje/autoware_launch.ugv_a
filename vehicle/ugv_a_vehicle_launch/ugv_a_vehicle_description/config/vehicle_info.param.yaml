@@ -8,5 +8,5 @@
     rear_overhang: 0.360 #1.1 between rear wheel center and vehicle rear
     left_overhang: 0.068 #0.128  between left wheel center and vehicle left
     right_overhang: 0.068 #0.128 between right wheel center and vehicle right
-    vehicle_height: 0.39 #2.5
+    vehicle_height: 1.20 # temporary frame + Airy top (lidar base 1.145 m), measure #2.5
     max_steer_angle: 0.47 #0.70 [rad]

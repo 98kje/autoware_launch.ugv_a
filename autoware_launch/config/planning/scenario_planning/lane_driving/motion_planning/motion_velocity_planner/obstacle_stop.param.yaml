@@ -6,14 +6,14 @@
         suppress_sudden_stop: false
 
       stop_planning:
-        stop_margin : 5.0 # longitudinal margin to obstacle [m]
-        terminal_stop_margin : 3.0 # Stop margin at the goal. This value cannot exceed stop margin. [m]
-        min_behavior_stop_margin: 3.0 # [m]
+        stop_margin : 2.0 # longitudinal margin to obstacle [m] (ugv_a: 5.0 -> 2.0; person must stay >= 0.8 m from the front, incl. people walking back toward the robot)
+        terminal_stop_margin : 1.0 # Stop margin at the goal. This value cannot exceed stop margin. [m] (ugv_a: 3.0 -> 1.0)
+        min_behavior_stop_margin: 1.0 # [m] (ugv_a: 3.0 -> 1.0)
         behavior_stop_margin_hold_time: 2.0 # [s] time to hold the min_behavior_stop_margin after disappearing the behavior stop point
 
-        max_negative_velocity: -100.0 # [m/s] maximum velocity of opposing traffic to consider stop planning
-        stop_margin_opposing_traffic: 10.0 # Ideal stop-margin from moving opposing obstacle when ego comes to a stop
-        effective_deceleration_opposing_traffic: 4.0 # Setting a higher value brings the final stop-margin closer to the ideal value above
+        max_negative_velocity: -0.15 # [m/s] maximum velocity of opposing traffic to consider stop planning (ugv_a: -100 -> -0.15, people walking toward the robot)
+        stop_margin_opposing_traffic: 2.0 # Ideal stop-margin from moving opposing obstacle when ego comes to a stop (ugv_a: 10 -> 2.0)
+        effective_deceleration_opposing_traffic: 1.0 # Setting a higher value brings the final stop-margin closer to the ideal value above (ugv_a: 4.0 -> 1.0)
 
         min_on_duration: 0.3  # [s] minimum duration needed before a decision can be triggered
         min_off_duration: 1.0  # [s] minimum duration needed before a decision can be canceled
@@ -54,7 +54,7 @@
       obstacle_filtering: # All parameters under this namespace can be set for each object type. If you want to set a value different from the default, please add a line.
         check_inside: # If true, the planner checks if the obstacle is inside the ego's footprint; can be tuned for each object type
           default: true
-          pointcloud: false
+          pointcloud: true  # ugv_a: stop for raw pointcloud obstacles (no object detection on this robot)
         check_outside: # If true, the planner checks if the obstacle is outside the ego's footprint. pointcloud obstacles are not supported.
           default: true
           unknown: false
@@ -70,7 +70,7 @@
           nominal:
             default: 0.3
             unknown: 0.3
-            pointcloud: 0.3
+            pointcloud: 0.2  # ugv_a: 0.3 -> 0.2, narrow deck (fence plants / walking companion ~0.7 m from the lane center)
           additional: # additional stop margin to the obstacle.
             wheel_off_track_scale: # scale factor for additional stop margin against ego's wheel off-track. Even if this value is set to 0.0, the planner considers the nominal wheel off-track.
               default: 0.0
@@ -113,10 +113,10 @@
           position_diff: 1.0
         velocity_estimation:
           use_estimated_velocity: false
-          min_clamp_velocity: 0.0
+          min_clamp_velocity: -3.0  # ugv_a: keep negative (approaching) pointcloud velocity
           max_clamp_velocity: 20.0
-          required_velocity_count: 5
-          lpf_gain: 0.9
+          required_velocity_count: 3  # ugv_a: 5 -> 3, react faster to people walking toward the robot
+          lpf_gain: 0.6  # ugv_a: 0.9 -> 0.6
         height_margin:
           margin_from_top: 0.5 # [m] margin from the top of the ego vehicle
           margin_from_bottom: 0.5 # [m] margin from the bottom of the ego vehicle

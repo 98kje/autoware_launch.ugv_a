@@ -2,7 +2,7 @@ base_link:
   sensor_kit_base_link:
     x: 0.000000
     y: 0.000000
-    z: 0.345
+    z: 0.330  # deck top center, field measured 2026-11-06 (CAD 0.345)
     roll: 0.000000
     pitch: 0.000000
     yaw: 0.000000

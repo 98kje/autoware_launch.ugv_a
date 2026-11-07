@@ -1,8 +1,8 @@
 /**:
   ros__parameters:
     # Static expansion
-    drivable_area_right_bound_offset: 0.0
-    drivable_area_left_bound_offset: 0.0
+    drivable_area_right_bound_offset: 0.2  # ugv_a: 0.0 -> 0.2, 1.0 m lane + 0.5 m body on tight corners (path_optimizer outside-drivable-area stop)
+    drivable_area_left_bound_offset: 0.2  # ugv_a: 0.0 -> 0.2
     drivable_area_types_to_skip: [road_border]
 
     # Dynamic expansion by using the path curvature
